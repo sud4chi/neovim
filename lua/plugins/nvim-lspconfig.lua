@@ -5,7 +5,8 @@ return {
 	dependencies = {
 		{
 			"williamboman/mason-lspconfig.nvim",
-			cmd = { "LspInstall", "LspUninstall" },
+			event = "VeryLazy",
+			build = ":MasonUpdate",
 			config = function()
 				local mason_lspconfig = require("mason-lspconfig")
 				local capabilities = require("cmp_nvim_lsp").default_capabilities()
@@ -15,15 +16,7 @@ return {
 						navic.attach(client, bufnr)
 					end
 				end
-				mason_lspconfig.setup_handlers({
-					function(server)
-						local opt = {
-							capabilities = capabilities,
-							on_attach = on_attach,
-						}
-						require("lspconfig")[server].setup(opt)
-					end,
-				})
+				vim.lsp.enable(require('mason-lspconfig').get_installed_servers())
 			end,
 		},
 	},
